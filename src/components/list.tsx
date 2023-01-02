@@ -1,6 +1,7 @@
 import React from "react";
 import Card from "./card";
 import { CardType } from "../redux/lists";
+import ActionButton from "./action-button";
 
 export default function List({
   title,
@@ -12,9 +13,12 @@ export default function List({
   return (
     <div style={styles.container}>
       <h3 style={styles.title}>{title}</h3>
-      {cards?.map((card) => (
-        <Card key={card.id} card={card} />
-      ))}
+      <ul>
+        {cards?.map((card) => (
+          <Card key={card.id} card={card} />
+        ))}
+      </ul>
+      <ActionButton type="card" />
     </div>
   );
 }

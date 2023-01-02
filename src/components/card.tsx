@@ -16,7 +16,7 @@ const bull = (
 
 export default function EachCard({ card }: { card: CardType }) {
   return (
-    <Card sx={{ minWidth: 275 }} style={styles.container}>
+    <Card sx={{ minWidth: 272 }} style={styles.container}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {card.content}
