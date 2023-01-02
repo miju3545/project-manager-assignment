@@ -1,9 +1,7 @@
 import { Store, combineReducers, createStore } from "redux";
 import lists from "./lists";
 
-const rootReduer = combineReducers({
-  lists,
-});
+const rootReduer = combineReducers({ lists });
 
 export type RootState = ReturnType<typeof rootReduer>;
 

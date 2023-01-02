@@ -1,10 +1,12 @@
+import "./css/index.css";
+
 import React from "react";
 import { useRoutes } from "react-router-dom";
 import routes from "./routes";
 import { getStore } from "./redux";
 import { Provider } from "react-redux";
 
-function App() {
+export default function App() {
   const element = useRoutes(routes);
   const store = getStore();
 
@@ -14,5 +16,3 @@ function App() {
     </Provider>
   );
 }
-
-export default App;
