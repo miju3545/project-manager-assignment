@@ -4,9 +4,11 @@ import { CardType } from "../redux/lists";
 import ActionButton from "./action-button";
 
 export default function List({
+  id,
   title,
   cards,
 }: {
+  id: string;
   title: string;
   cards: CardType[];
 }) {
@@ -18,7 +20,7 @@ export default function List({
           <Card key={card.id} card={card} />
         ))}
       </ul>
-      <ActionButton type="card" />
+      <ActionButton type="card" listId={id} />
     </div>
   );
 }
@@ -28,7 +30,7 @@ const styles = {
     backgroundColor: "#eaecf0",
     borderRadius: 3,
     width: 300,
-    padding: 8,
+    padding: 6,
     marginRight: 8,
   },
   title: {

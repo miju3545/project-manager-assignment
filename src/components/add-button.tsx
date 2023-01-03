@@ -13,7 +13,7 @@ export default function AddButton({
 }) {
   return (
     <div
-      style={{ ...styles.container, ...actionButtonData[type].style }}
+      style={{ ...styles.container, ...actionButtonData[type].buttonStyle }}
       onClick={onClick}
     >
       <IconButton aria-label="add">

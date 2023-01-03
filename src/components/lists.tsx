@@ -7,7 +7,12 @@ export default function Lists({ lists }: { lists: ListType[] }) {
   return (
     <div style={styles.container}>
       {lists?.map((list) => (
-        <List key={list.id} title={list.title} cards={list.cards} />
+        <List
+          key={list.id}
+          id={list.id}
+          title={list.title}
+          cards={list.cards}
+        />
       ))}
       <ActionButton type={"list"} />
     </div>
@@ -17,6 +22,7 @@ export default function Lists({ lists }: { lists: ListType[] }) {
 const styles = {
   container: {
     display: "flex",
+    alignItems: "flex-start",
     marginRight: 8,
   },
 };

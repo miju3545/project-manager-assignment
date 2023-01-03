@@ -1,17 +1,26 @@
 const TYPES = {
-  CREATE: "list/CREATE" as const,
-  DELETE: "list/DELETE" as const,
+  ADD_LIST: "list/ADD_LIST" as const,
+  DELETE_LIST: "list/DELETE_LIST" as const,
+  ADD_CARD: "card/ADD_CARD" as const,
 };
 
-export const createList = (title: string) => ({
-  type: TYPES.CREATE,
+export const addList = (title: string) => ({
+  type: TYPES.ADD_LIST,
   payload: title,
 });
-export const deleteList = (id: string) => ({ type: TYPES.DELETE, payload: id });
+export const deleteList = (id: string) => ({
+  type: TYPES.DELETE_LIST,
+  payload: id,
+});
+export const addCard = (title: string, listId?: string) => ({
+  type: TYPES.ADD_CARD,
+  payload: { listId, title },
+});
+export const deleteCard = () => ({});
 
 export type CardType = {
   id: string;
-  content: string;
+  title: string;
 };
 
 export type ListType = {
@@ -21,7 +30,11 @@ export type ListType = {
 };
 
 type StateType = ListType[];
-type ActionType = ReturnType<typeof createList> | ReturnType<typeof deleteList>;
+type ActionType =
+  | ReturnType<typeof addList>
+  | ReturnType<typeof deleteList>
+  | ReturnType<typeof addCard>;
+// | ReturnType<typeof deleteCard>;
 
 const initialState: StateType = [
   {
@@ -30,11 +43,11 @@ const initialState: StateType = [
     cards: [
       {
         id: "1",
-        content: "type what you need.",
+        title: "type what you need.",
       },
       {
         id: "2",
-        content: "type what you need.",
+        title: "type what you need.",
       },
     ],
   },
@@ -44,24 +57,59 @@ const initialState: StateType = [
     cards: [
       {
         id: "3",
-        content: "type what you need.",
+        title: "type what you need.",
       },
       {
         id: "4",
-        content: "type what you need.",
+        title: "type what you need.",
       },
     ],
   },
 ];
+
 export default function listsReducer(
   state: StateType = initialState,
   action: ActionType
 ): StateType {
+  const nextListId = Math.max(...state.map((list) => +list.id), 0);
+  const nextCardId = Math.max(
+    ...state.map((list) => list.cards?.map((card) => +card.id)).flat(),
+    0
+  );
+
   switch (action.type) {
-    case TYPES.CREATE:
-      return [...state];
-    case TYPES.DELETE:
-      return [...state];
+    case TYPES.ADD_LIST: {
+      const copiedLists = [...state];
+
+      return copiedLists.concat({
+        id: nextListId + 1 + "",
+        title: action.payload,
+        cards: [],
+      });
+    }
+    case TYPES.DELETE_LIST: {
+      const copiedLists = [...state];
+
+      return copiedLists.filter((list) => list.id !== action.payload);
+    }
+
+    case TYPES.ADD_CARD: {
+      const copiedLists = [...state];
+
+      return copiedLists.filter((list) => {
+        const targetList = list.id === action.payload.listId;
+
+        if (targetList) {
+          const newCard = {
+            id: nextCardId + 1 + "",
+            title: action.payload.title,
+          };
+          list.cards.push(newCard);
+        }
+
+        return list;
+      });
+    }
     default:
       return state;
   }
