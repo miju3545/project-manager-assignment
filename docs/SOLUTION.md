@@ -7,10 +7,11 @@
 ## 1. 스타일
 
 - `material-ui`
+- `emotion`
 
 ## 2. routes
 
-- 전체 layout 안에 nested-routes 되는 형태를 구현할 것.
+- 전체 layout 안에 nested-routes 되는 형태로 구현할 것.
 
 ## 3. 상태 관리
 
@@ -27,3 +28,4 @@
 ## 5. drag & drop
 
 - `react-beautiful-dnd`
+- 리스트/카드 이동하면 전체 배열의 순서가 바꿔야 한다.
