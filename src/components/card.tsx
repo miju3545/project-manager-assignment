@@ -1,9 +1,10 @@
 import React from "react";
-import Card from "@mui/material/Card";
+import MuiCard from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { CardType } from "../redux/lists";
 import { Draggable } from "react-beautiful-dnd";
+import styled from "@emotion/styled";
 
 export default function EachCard({
   index,
@@ -15,12 +16,12 @@ export default function EachCard({
   return (
     <Draggable index={index} draggableId={card.id}>
       {(provided) => (
-        <div
+        <CardContainer
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <Card sx={{ minWidth: 272 }} style={styles.container}>
+          <Card sx={{ minWidth: 272 }}>
             <CardContent>
               <Typography
                 sx={{ fontSize: 14 }}
@@ -31,7 +32,7 @@ export default function EachCard({
               </Typography>
             </CardContent>
           </Card>
-        </div>
+        </CardContainer>
       )}
     </Draggable>
   );
@@ -42,3 +43,8 @@ const styles = {
     marginBottom: 10,
   },
 };
+
+const CardContainer = styled.div``;
+const Card = styled(MuiCard)`
+  margin-bottom: 10px;
+`;

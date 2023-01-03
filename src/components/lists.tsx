@@ -1,31 +1,43 @@
 import React from "react";
 import List from "./list";
-import { ListType } from "../redux/lists";
+import { ListType, rearrange } from "../redux/lists";
 import ActionButton from "./action-button";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { useDispatch } from "react-redux";
+import styled from "@emotion/styled";
 
 export default function Lists({ lists }: { lists: ListType[] }) {
-  const onDragEnd = () => {
-    console.log("dragging....");
-    return;
+  const dispatch = useDispatch();
+  const handleDragEnd = (result: DropResult) => {
+    const { destination, source, draggableId } = result;
+
+    if (!destination) return;
+
+    dispatch(
+      rearrange(
+        draggableId,
+        source.droppableId,
+        destination?.droppableId,
+        source.index,
+        destination?.index
+      )
+    );
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div style={styles.container}>
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <ListsContainer>
         {lists?.map((list) => (
           <List key={list.id} list={list} />
         ))}
         <ActionButton type={"list"} />
-      </div>
+      </ListsContainer>
     </DragDropContext>
   );
 }
 
-const styles = {
-  container: {
-    display: "flex",
-    alignItems: "flex-start",
-    marginRight: 8,
-  },
-};
+const ListsContainer = styled.div`
+  display: flex;
+  align-items: flex-start;
+  margin-right: 8px;
+`;
