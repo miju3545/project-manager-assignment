@@ -3,19 +3,19 @@ import { InputBase } from "@mui/material";
 import { Control, Controller } from "react-hook-form";
 
 type InputProps = {
+  name: string;
+  control: Control;
   placeholder: string;
   onKeyPress: (e: React.KeyboardEvent) => void;
   onClose: () => void;
-  control: Control;
-  name: string;
 };
 
 export default function Input({
+  name,
+  control,
   placeholder,
   onKeyPress,
   onClose,
-  control,
-  name,
 }: InputProps) {
   return (
     <Controller

@@ -12,3 +12,7 @@
 textarea {
   font-family: inherit;
 }
+
+li {
+  list-style: none;
+}

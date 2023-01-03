@@ -10,7 +10,7 @@ export default function ActionButton({
   listId,
 }: {
   type: ActionButtonType;
-  listId: string;
+  listId?: string;
 }) {
   const [showForm, setShowForm] = useState(false);
 

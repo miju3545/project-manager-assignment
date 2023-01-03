@@ -14,7 +14,7 @@ const styles = {
     width: "100%",
     height: "100vh",
     backgroundColor: "rgb(220, 141, 179)",
-    overflow: "scroll",
+    // overflow: 'scroll',
   },
   main: {
     padding: 10,

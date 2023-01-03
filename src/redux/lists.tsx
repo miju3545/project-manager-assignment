@@ -42,25 +42,25 @@ const initialState: StateType = [
     title: "진행 중",
     cards: [
       {
-        id: "1",
+        id: "2",
         title: "type what you need.",
       },
       {
-        id: "2",
+        id: "3",
         title: "type what you need.",
       },
     ],
   },
   {
-    id: "2",
+    id: "4",
     title: "완료",
     cards: [
       {
-        id: "3",
+        id: "5",
         title: "type what you need.",
       },
       {
-        id: "4",
+        id: "6",
         title: "type what you need.",
       },
     ],
@@ -88,15 +88,11 @@ export default function listsReducer(
       });
     }
     case TYPES.DELETE_LIST: {
-      const copiedLists = [...state];
-
-      return copiedLists.filter((list) => list.id !== action.payload);
+      return state.filter((list) => list.id !== action.payload);
     }
 
     case TYPES.ADD_CARD: {
-      const copiedLists = [...state];
-
-      return copiedLists.filter((list) => {
+      return state.filter((list) => {
         const targetList = list.id === action.payload.listId;
 
         if (targetList) {

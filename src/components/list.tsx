@@ -1,27 +1,27 @@
 import React from "react";
 import Card from "./card";
-import { CardType } from "../redux/lists";
+import { ListType } from "../redux/lists";
 import ActionButton from "./action-button";
+import { Droppable } from "react-beautiful-dnd";
 
-export default function List({
-  id,
-  title,
-  cards,
-}: {
-  id: string;
-  title: string;
-  cards: CardType[];
-}) {
+export default function List({ list }: { list: ListType }) {
   return (
-    <div style={styles.container}>
-      <h3 style={styles.title}>{title}</h3>
-      <ul>
-        {cards?.map((card) => (
-          <Card key={card.id} card={card} />
-        ))}
-      </ul>
-      <ActionButton type="card" listId={id} />
-    </div>
+    <Droppable droppableId={list.id}>
+      {(provided) => (
+        <div
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+          style={styles.container}
+        >
+          <h3 style={styles.title}>{list.title}</h3>
+          {list.cards?.map((card, index) => (
+            <Card key={card.id} index={index} card={card} />
+          ))}
+          <ActionButton type="card" listId={list.id} />
+          {provided.placeholder}
+        </div>
+      )}
+    </Droppable>
   );
 }
 

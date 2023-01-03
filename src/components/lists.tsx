@@ -2,20 +2,23 @@ import React from "react";
 import List from "./list";
 import { ListType } from "../redux/lists";
 import ActionButton from "./action-button";
+import { DragDropContext } from "react-beautiful-dnd";
 
 export default function Lists({ lists }: { lists: ListType[] }) {
+  const onDragEnd = () => {
+    console.log("dragging....");
+    return;
+  };
+
   return (
-    <div style={styles.container}>
-      {lists?.map((list) => (
-        <List
-          key={list.id}
-          id={list.id}
-          title={list.title}
-          cards={list.cards}
-        />
-      ))}
-      <ActionButton type={"list"} />
-    </div>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div style={styles.container}>
+        {lists?.map((list) => (
+          <List key={list.id} list={list} />
+        ))}
+        <ActionButton type={"list"} />
+      </div>
+    </DragDropContext>
   );
 }
 
