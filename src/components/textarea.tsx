@@ -1,13 +1,13 @@
-import React, { ForwardedRef } from "react";
+import React from "react";
 import { TextareaAutosize } from "@mui/material";
 import { Control, Controller } from "react-hook-form";
 
 type TextareaProps = {
+  name: string;
+  control: Control;
   placeholder: string;
   onKeyPress: (e: React.KeyboardEvent) => void;
   onClose: () => void;
-  control: Control;
-  name: string;
 };
 
 export default function Textarea({
