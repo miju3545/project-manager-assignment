@@ -15,8 +15,8 @@ const actionButtonData = {
     formCardStyle: {
       overflow: "visible",
       minHeight: 80,
-      minWidth: 272,
       padding: "6px 8px 2px",
+      fontSize: 15,
     },
     FormElement: Textarea,
     dispatchAction: addCard,
@@ -28,16 +28,20 @@ const actionButtonData = {
     buttonStyle: {
       textColor: "#fff",
       backgroundColor: "rgba(0,0,0,0.2)",
+      width: 272,
     },
     formStyle: {
       padding: 6,
+      minWidth: 272,
+      fontSize: 15,
     },
     formCardStyle: {
       overflow: "visible",
       minHeight: 30,
-      minWidth: 272,
+      // minWidth: 272,
       padding: "6px 8px 2px",
     },
+
     FormElement: Input,
     dispatchAction: addList,
   },
