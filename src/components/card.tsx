@@ -1,50 +1,41 @@
 import React from "react";
-import MuiCard from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
 import { CardType } from "../redux/lists";
 import { Draggable } from "react-beautiful-dnd";
-import styled from "@emotion/styled";
+import TitleActionButton from "./title-action-button";
+import { updateCardTitle } from "../redux/lists";
+import { useDispatch } from "react-redux";
 
 export default function EachCard({
   index,
+  listId,
   card,
 }: {
   index: number;
+  listId: string;
   card: CardType;
 }) {
+  const { id, title } = card;
+  const dispatch = useDispatch();
+
+  const executeAction = (listId: string) => (title: string) => {
+    dispatch(updateCardTitle(listId, id, title));
+  };
+
   return (
-    <Draggable index={index} draggableId={card.id}>
+    <Draggable index={index} draggableId={id}>
       {(provided) => (
-        <CardContainer
+        <div
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <Card sx={{ minWidth: 272 }}>
-            <CardContent>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.secondary"
-                gutterBottom
-              >
-                {card.title}
-              </Typography>
-            </CardContent>
-          </Card>
-        </CardContainer>
+          <TitleActionButton
+            title={title}
+            type={"card"}
+            executeAction={executeAction(listId)}
+          />
+        </div>
       )}
     </Draggable>
   );
 }
-
-const styles = {
-  container: {
-    marginBottom: 10,
-  },
-};
-
-const CardContainer = styled.div``;
-const Card = styled(MuiCard)`
-  margin-bottom: 10px;
-`;
