@@ -2,7 +2,8 @@ import React from "react";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import actionButtonData from "../data/actionButtonData";
-import { ActionButtonType } from "./action-button";
+import { ActionButtonType } from "./add-action-button";
+import styled from "@emotion/styled";
 
 export default function AddButton({
   type,
@@ -12,27 +13,25 @@ export default function AddButton({
   onClick: () => void;
 }) {
   return (
-    <div
-      style={{ ...styles.container, ...actionButtonData[type].buttonStyle }}
+    <ButtonContainer
+      style={{ ...actionButtonData[type].buttonStyle }}
       onClick={onClick}
     >
-      <IconButton aria-label="add">
+      <IconButton aria-label="add" style={{ paddingBottom: 10 }}>
         <AddIcon />
       </IconButton>
       <p>{actionButtonData[type].text}</p>
-    </div>
+    </ButtonContainer>
   );
 }
 
-const styles = {
-  container: {
-    display: "flex",
-    background: "red",
-    alignItems: "center",
-    cursor: "pointer",
-    borderRadius: 3,
-    height: 36,
-    minWidth: 272,
-    fontSize: 15,
-  },
-};
+const ButtonContainer = styled.div`
+  display: flex;
+  background-color: red;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 3px;
+  height: 36px;
+  min-width: 272px;
+  font-size: 15px;
+`;

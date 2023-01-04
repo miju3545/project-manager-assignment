@@ -1,6 +1,6 @@
-import React, { KeyboardEvent } from "react";
+import React from "react";
 import actionButtonData from "../data/actionButtonData";
-import { ActionButtonType } from "./action-button";
+import { ActionButtonType } from "./add-action-button";
 import { Card } from "@mui/material";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 type FormType = {
   title: string;
 };
+
 export default function ActionForm({
   type,
   onClose,
@@ -38,14 +39,6 @@ export default function ActionForm({
     onClose();
   };
 
-  const onKeyPress = (e: KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      e.stopPropagation();
-      onSubmit();
-    }
-  };
-
   const FormElement = actionButtonData[type].FormElement;
 
   return (
@@ -57,7 +50,7 @@ export default function ActionForm({
               name={"title"}
               control={control}
               placeholder={actionButtonData[type].placeholder}
-              onKeyPress={onKeyPress}
+              onSubmit={onSubmit}
               onClose={onClose}
             />
           }

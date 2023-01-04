@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import AddButton from "./add-button";
-import ActionForm from "./action-form";
+import ActionForm from "./add-action-form";
 
 export type ActionButtonType = "card" | "list";
 

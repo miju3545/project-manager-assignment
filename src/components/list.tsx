@@ -1,26 +1,58 @@
 import React from "react";
 import Card from "./card";
-import { ListType } from "../redux/lists";
-import ActionButton from "./action-button";
-import { Droppable } from "react-beautiful-dnd";
+import { ListType, updateListTitle } from "../redux/lists";
+import AddActionButton from "./add-action-button";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import styled from "@emotion/styled";
+import TitleActionButton from "./title-action-button";
+import { useDispatch } from "react-redux";
 
-export default function List({ list }: { list: ListType }) {
+export default function List({
+  index,
+  list,
+}: {
+  index: number;
+  list: ListType;
+}) {
+  const { id, title, cards } = list;
+  const dispatch = useDispatch();
+
+  const executeAction = (listId: string) => (title: string) => {
+    dispatch(updateListTitle(listId, title));
+  };
+
   return (
-    <Droppable droppableId={list.id}>
+    <Draggable draggableId={list.id} index={index}>
       {(provided) => (
-        <ListContainer ref={provided.innerRef} {...provided.droppableProps}>
-          <Title>{list.title}</Title>
-          <CardList>
-            {list.cards?.map((card, index) => (
-              <Card key={card.id} index={index} card={card} />
-            ))}
-          </CardList>
-          <ActionButton type="card" listId={list.id} />
-          {provided.placeholder}
-        </ListContainer>
+        <div
+          ref={provided.innerRef}
+          {...provided.dragHandleProps}
+          {...provided.draggableProps}
+        >
+          <Droppable droppableId={id}>
+            {(provided) => (
+              <ListContainer
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                <TitleActionButton
+                  type="list"
+                  title={title}
+                  executeAction={executeAction(id)}
+                />
+                <div>
+                  {cards?.map((card, index) => (
+                    <Card key={card.id} listId={id} index={index} card={card} />
+                  ))}
+                </div>
+                {provided.placeholder}
+                <AddActionButton type="card" listId={list.id} />
+              </ListContainer>
+            )}
+          </Droppable>
+        </div>
       )}
-    </Droppable>
+    </Draggable>
   );
 }
 
@@ -31,11 +63,3 @@ const ListContainer = styled.div`
   padding: 6px;
   margin-right: 8px;
 `;
-
-const Title = styled.h3`
-  color: #28395a;
-  font-size: 14px;
-  padding: 10px 5px;
-`;
-
-const CardList = styled.div``;
