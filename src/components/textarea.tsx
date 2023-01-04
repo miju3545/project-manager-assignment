@@ -1,22 +1,29 @@
-import React from "react";
+import React, { KeyboardEvent } from "react";
 import { TextareaAutosize } from "@mui/material";
 import { Control, Controller } from "react-hook-form";
 
 type TextareaProps = {
   name: string;
   control: Control;
-  placeholder: string;
-  onKeyPress: (e: React.KeyboardEvent) => void;
+  placeholder?: string;
+  onSubmit: () => void;
   onClose: () => void;
 };
 
 export default function Textarea({
   placeholder,
-  onKeyPress,
+  onSubmit,
   onClose,
   control,
   name,
 }: TextareaProps) {
+  const onKeyPress = (e: KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      e.stopPropagation();
+      onSubmit();
+    }
+  };
   return (
     <Controller
       name={name}

@@ -1,12 +1,12 @@
-import React from "react";
+import React, { KeyboardEvent } from "react";
 import { InputBase } from "@mui/material";
 import { Control, Controller } from "react-hook-form";
 
 type InputProps = {
   name: string;
   control: Control;
-  placeholder: string;
-  onKeyPress: (e: React.KeyboardEvent) => void;
+  placeholder?: string;
+  onSubmit: () => void;
   onClose: () => void;
 };
 
@@ -14,9 +14,17 @@ export default function Input({
   name,
   control,
   placeholder,
-  onKeyPress,
+  onSubmit,
   onClose,
 }: InputProps) {
+  const onKeyPress = (e: KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      e.stopPropagation();
+      onSubmit();
+    }
+  };
+
   return (
     <Controller
       name={name}
@@ -34,6 +42,7 @@ export default function Input({
             outline: "none",
             border: "none",
             fontSize: 15,
+            backgroundColor: "#Ffff",
           }}
           autoFocus
         />
