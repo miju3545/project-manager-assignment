@@ -1,22 +1,62 @@
 const TYPES = {
   ADD_LIST: "list/ADD_LIST" as const,
   DELETE_LIST: "list/DELETE_LIST" as const,
+  UPDATE_LIST_TITLE: "list/UPDATE_LIST_TITLE" as const,
   ADD_CARD: "card/ADD_CARD" as const,
+  UPDATE_CARD_TITLE: "card/UPDATE_CARD_TITLE" as const,
+  EXECUTE_DRAGD_AND_ROP: "drag/EXECUTE_DRAGD_AND_ROP" as const,
 };
 
 export const addList = (title: string) => ({
   type: TYPES.ADD_LIST,
   payload: title,
 });
-export const deleteList = (id: string) => ({
+export const deleteList = (listId: string) => ({
   type: TYPES.DELETE_LIST,
-  payload: id,
+  payload: listId,
 });
+
+export const updateListTitle = (listId: string, title: string) => ({
+  type: TYPES.UPDATE_LIST_TITLE,
+  payload: { listId, title },
+});
+
 export const addCard = (title: string, listId?: string) => ({
   type: TYPES.ADD_CARD,
   payload: { listId, title },
 });
+
+export const updateCardTitle = (
+  listId: string,
+  cardId: string,
+  title: string
+) => ({
+  type: TYPES.UPDATE_CARD_TITLE,
+  payload: { listId, cardId, title },
+});
+
 export const deleteCard = () => ({});
+
+export const rearrange = (
+  draggableId: string,
+  droppableStartId: string,
+  droppableEndId: string,
+  droppableStartIndex: number,
+  droppableEndIndex: number,
+  type: string
+) => {
+  return {
+    type: TYPES.EXECUTE_DRAGD_AND_ROP,
+    payload: {
+      draggableId,
+      droppableStartId,
+      droppableEndId,
+      droppableStartIndex,
+      droppableEndIndex,
+      type,
+    },
+  };
+};
 
 export type CardType = {
   id: string;
@@ -33,7 +73,10 @@ type StateType = ListType[];
 type ActionType =
   | ReturnType<typeof addList>
   | ReturnType<typeof deleteList>
-  | ReturnType<typeof addCard>;
+  | ReturnType<typeof updateListTitle>
+  | ReturnType<typeof addCard>
+  | ReturnType<typeof updateCardTitle>
+  | ReturnType<typeof rearrange>;
 // | ReturnType<typeof deleteCard>;
 
 const initialState: StateType = [
@@ -61,6 +104,14 @@ const initialState: StateType = [
       },
       {
         id: "6",
+        title: "type what you need.",
+      },
+      {
+        id: "7",
+        title: "type what you need.",
+      },
+      {
+        id: "8",
         title: "type what you need.",
       },
     ],
@@ -91,6 +142,16 @@ export default function listsReducer(
       return state.filter((list) => list.id !== action.payload);
     }
 
+    case TYPES.UPDATE_LIST_TITLE: {
+      return state.map((list) => {
+        const { listId, title } = action.payload;
+
+        if (list.id === listId) {
+          list.title = title;
+        }
+        return list;
+      });
+    }
     case TYPES.ADD_CARD: {
       return state.filter((list) => {
         const targetList = list.id === action.payload.listId;
@@ -105,6 +166,62 @@ export default function listsReducer(
 
         return list;
       });
+    }
+
+    case TYPES.UPDATE_CARD_TITLE: {
+      return state.map((list) => {
+        const { listId, cardId, title } = action.payload;
+
+        if (list.id === listId) {
+          const cards = list.cards.map((card) => {
+            if (card.id === cardId) {
+              card.title = title;
+            }
+
+            return card;
+          });
+          return { ...list, cards };
+        }
+        return list;
+      });
+    }
+
+    case TYPES.EXECUTE_DRAGD_AND_ROP: {
+      const {
+        droppableStartId,
+        droppableEndId,
+        droppableStartIndex,
+        droppableEndIndex,
+        type,
+      } = action.payload;
+
+      const copied = [...state];
+
+      if (type === "list") {
+        const list = copied.splice(droppableStartIndex, 1)[0];
+        copied.splice(droppableEndIndex, 0, list);
+      }
+
+      const onTheSameList = droppableStartId === droppableEndId;
+
+      if (onTheSameList) {
+        const list = state.filter((list) => list.id === droppableStartId)[0];
+        const card = list?.cards.splice(droppableStartIndex, 1)[0];
+        if (card) {
+          list?.cards.splice(droppableEndIndex, 0, card);
+        }
+      } else {
+        const startList = state.filter(
+          (list) => list.id === droppableStartId
+        )[0];
+        const card = startList?.cards.splice(droppableStartIndex, 1)[0];
+
+        const endList = state.filter((list) => list.id === droppableEndId)[0];
+
+        endList.cards.splice(droppableEndIndex, 0, card);
+      }
+
+      return copied;
     }
     default:
       return state;
