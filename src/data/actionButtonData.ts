@@ -1,6 +1,6 @@
 import Textarea from "../components/textarea";
 import Input from "../components/input";
-import { addList, addCard } from "../redux/lists";
+import { addList, addCard, deleteCard } from "../redux/lists";
 
 const actionButtonData = {
   card: {
@@ -20,6 +20,7 @@ const actionButtonData = {
     },
     FormElement: Textarea,
     dispatchAction: addCard,
+    deleteAction: deleteCard,
   },
   list: {
     text: "Add another list",
