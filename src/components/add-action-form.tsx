@@ -34,7 +34,6 @@ export default function ActionForm({
 
     if (!title) return;
 
-    console.log(title, listId);
     dispatch(actionButtonData[type].dispatchAction(title, listId));
     onClose();
   };

@@ -1,6 +1,5 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import Input from "./input";
 import actionButtonData from "../data/actionButtonData";
 import { ActionButtonType } from "./add-action-button";
 
@@ -32,9 +31,11 @@ export default function TitleActionForm({
     onClose();
   };
 
+  const FormElement = actionButtonData[type].FormElement;
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Input
+      <FormElement
         name={"title"}
         control={control}
         onSubmit={onSubmit}

@@ -6,6 +6,8 @@ import { Draggable, Droppable } from "react-beautiful-dnd";
 import styled from "@emotion/styled";
 import TitleActionButton from "./title-action-button";
 import { useDispatch } from "react-redux";
+import MoreHorizSharpIcon from "@mui/icons-material/MoreHorizSharp";
+import IconButton from "@mui/material/IconButton";
 
 export default function List({
   index,
@@ -35,11 +37,26 @@ export default function List({
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
-                <TitleActionButton
-                  type="list"
-                  title={title}
-                  executeAction={executeAction(id)}
-                />
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <TitleActionButton
+                    type="list"
+                    title={title}
+                    executeAction={executeAction(id)}
+                  />
+                  <IconButton
+                    aria-label="more"
+                    size="small"
+                    style={{ paddingTop: 6, marginLeft: 4 }}
+                  >
+                    <MoreHorizSharpIcon />
+                  </IconButton>
+                </div>
                 <div>
                   {cards?.map((card, index) => (
                     <Card key={card.id} listId={id} index={index} card={card} />
@@ -59,7 +76,7 @@ export default function List({
 const ListContainer = styled.div`
   background-color: #eaecf0;
   border-radius: 3px;
-  width: 300px;
+  min-width: 272px;
   padding: 6px;
   margin-right: 8px;
 `;

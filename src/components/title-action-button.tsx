@@ -24,7 +24,7 @@ export default function TitleActionButton({
   return (
     <Container onClick={() => setShowForm((prev) => !prev)}>
       <Card
-        sx={{ minWidth: 272 }}
+        // sx={{ minWidth: 272 }}
         style={{ ...actionButtonData[type].formCardStyle }}
       >
         {showForm ? (
