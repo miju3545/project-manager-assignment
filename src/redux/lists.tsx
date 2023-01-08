@@ -1,16 +1,24 @@
 const TYPES = {
+  SYNC_LIST: "list/SYNC_LIST" as const,
   ADD_LIST: "list/ADD_LIST" as const,
   DELETE_LIST: "list/DELETE_LIST" as const,
   UPDATE_LIST_TITLE: "list/UPDATE_LIST_TITLE" as const,
   ADD_CARD: "card/ADD_CARD" as const,
   UPDATE_CARD_TITLE: "card/UPDATE_CARD_TITLE" as const,
+  DELETE_CARD: "list/DELETE_CARD" as const,
   EXECUTE_DRAGD_AND_ROP: "drag/EXECUTE_DRAGD_AND_ROP" as const,
 };
+
+export const syncList = (lists: ListType[]) => ({
+  type: TYPES.SYNC_LIST,
+  payload: lists,
+});
 
 export const addList = (title: string) => ({
   type: TYPES.ADD_LIST,
   payload: title,
 });
+
 export const deleteList = (listId: string) => ({
   type: TYPES.DELETE_LIST,
   payload: listId,
@@ -35,7 +43,10 @@ export const updateCardTitle = (
   payload: { listId, cardId, title },
 });
 
-export const deleteCard = () => ({});
+export const deleteCard = (listId: string, cardId: string) => ({
+  type: TYPES.DELETE_CARD,
+  payload: { listId, cardId },
+});
 
 export const rearrange = (
   draggableId: string,
@@ -71,79 +82,55 @@ export type ListType = {
 
 type StateType = ListType[];
 type ActionType =
+  | ReturnType<typeof syncList>
   | ReturnType<typeof addList>
   | ReturnType<typeof deleteList>
   | ReturnType<typeof updateListTitle>
   | ReturnType<typeof addCard>
   | ReturnType<typeof updateCardTitle>
+  | ReturnType<typeof deleteCard>
   | ReturnType<typeof rearrange>;
-// | ReturnType<typeof deleteCard>;
 
-const initialState: StateType = [
-  {
-    id: "1",
-    title: "진행 중",
-    cards: [
-      {
-        id: "2",
-        title: "type what you need.",
-      },
-      {
-        id: "3",
-        title: "type what you need.",
-      },
-    ],
-  },
-  {
-    id: "4",
-    title: "완료",
-    cards: [
-      {
-        id: "5",
-        title: "type what you need.",
-      },
-      {
-        id: "6",
-        title: "type what you need.",
-      },
-      {
-        id: "7",
-        title: "type what you need.",
-      },
-      {
-        id: "8",
-        title: "type what you need.",
-      },
-    ],
-  },
-];
+const setList = (lists: ListType[]) =>
+  localStorage.setItem("lists", JSON.stringify(lists));
+
+const initialState: StateType =
+  JSON.parse(localStorage.getItem("lists") || "") || [];
+
+let nextId = 1;
 
 export default function listsReducer(
   state: StateType = initialState,
   action: ActionType
 ): StateType {
-  const nextListId = Math.max(...state.map((list) => +list.id), 0);
-  const nextCardId = Math.max(
-    ...state.map((list) => list.cards?.map((card) => +card.id)).flat(),
-    0
-  );
-
   switch (action.type) {
-    case TYPES.ADD_LIST: {
-      const copiedLists = [...state];
+    case TYPES.SYNC_LIST: {
+      return action.payload;
+    }
 
-      return copiedLists.concat({
-        id: nextListId + 1 + "",
+    case TYPES.ADD_LIST: {
+      const copied = [...state];
+      const newList = copied.concat({
+        id: nextId++ + "",
         title: action.payload,
         cards: [],
       });
+
+      setList(newList);
+
+      return newList;
     }
+
     case TYPES.DELETE_LIST: {
-      return state.filter((list) => list.id !== action.payload);
+      const newList = state.filter((list) => list.id !== action.payload);
+
+      setList(newList);
+
+      return newList;
     }
 
     case TYPES.UPDATE_LIST_TITLE: {
-      return state.map((list) => {
+      const newList = state.map((list) => {
         const { listId, title } = action.payload;
 
         if (list.id === listId) {
@@ -151,14 +138,19 @@ export default function listsReducer(
         }
         return list;
       });
+
+      setList(newList);
+
+      return newList;
     }
+
     case TYPES.ADD_CARD: {
-      return state.filter((list) => {
+      const newList = state.filter((list) => {
         const targetList = list.id === action.payload.listId;
 
         if (targetList) {
           const newCard = {
-            id: nextCardId + 1 + "",
+            id: nextId++ + "",
             title: action.payload.title,
           };
           list.cards.push(newCard);
@@ -166,10 +158,14 @@ export default function listsReducer(
 
         return list;
       });
+
+      setList(newList);
+
+      return newList;
     }
 
     case TYPES.UPDATE_CARD_TITLE: {
-      return state.map((list) => {
+      const newList = state.map((list) => {
         const { listId, cardId, title } = action.payload;
 
         if (list.id === listId) {
@@ -184,6 +180,27 @@ export default function listsReducer(
         }
         return list;
       });
+
+      setList(newList);
+
+      return newList;
+    }
+
+    case TYPES.DELETE_CARD: {
+      const { listId, cardId } = action.payload;
+
+      const newList = state.map((list) => {
+        if (list.id === listId) {
+          const cards = list.cards.filter((card) => card.id !== cardId);
+          list.cards = cards;
+        }
+
+        return list;
+      });
+
+      setList(newList);
+
+      return newList;
     }
 
     case TYPES.EXECUTE_DRAGD_AND_ROP: {
@@ -205,21 +222,21 @@ export default function listsReducer(
       const onTheSameList = droppableStartId === droppableEndId;
 
       if (onTheSameList) {
-        const list = state.filter((list) => list.id === droppableStartId)[0];
+        const list = copied.filter((list) => list.id === droppableStartId)[0];
         const card = list?.cards.splice(droppableStartIndex, 1)[0];
         if (card) {
           list?.cards.splice(droppableEndIndex, 0, card);
         }
       } else {
-        const startList = state.filter(
+        const startList = copied.filter(
           (list) => list.id === droppableStartId
         )[0];
         const card = startList?.cards.splice(droppableStartIndex, 1)[0];
-
-        const endList = state.filter((list) => list.id === droppableEndId)[0];
-
+        const endList = copied.filter((list) => list.id === droppableEndId)[0];
         endList.cards.splice(droppableEndIndex, 0, card);
       }
+
+      setList(copied);
 
       return copied;
     }
