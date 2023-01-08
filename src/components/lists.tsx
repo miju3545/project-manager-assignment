@@ -1,12 +1,16 @@
 import React from "react";
 import List from "./list";
-import { ListType, rearrange } from "../redux/lists";
+import { ListType, rearrange } from "../redux/actions";
 import ActionButton from "./add-action-button";
 import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
 import { useDispatch } from "react-redux";
 import styled from "@emotion/styled";
 
-export default function Lists({ lists }: { lists: ListType[] }) {
+type ListsProps = {
+  lists: ListType[];
+};
+
+export default function Lists({ lists }: ListsProps) {
   const dispatch = useDispatch();
   const handleDragEnd = (result: DropResult) => {
     const { destination, source, draggableId, type } = result;
@@ -27,7 +31,7 @@ export default function Lists({ lists }: { lists: ListType[] }) {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <Droppable droppableId={"total"} direction={"horizontal"} type={"list"}>
+      <Droppable type={"list"} droppableId={"total"} direction={"horizontal"}>
         {(provided) => (
           <ListsContainer ref={provided.innerRef} {...provided.droppableProps}>
             {lists?.map((list, index) => (

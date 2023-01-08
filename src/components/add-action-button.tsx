@@ -5,7 +5,7 @@ import ActionForm from "./add-action-form";
 
 export type ActionButtonType = "card" | "list";
 
-export default function ActionButton({
+export default function AddActionButton({
   type,
   listId,
 }: {

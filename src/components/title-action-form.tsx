@@ -12,12 +12,12 @@ export default function TitleActionForm({
   type,
   title,
   onClose,
-  executeAction,
+  onUpdate,
 }: {
   type: ActionButtonType;
   title: string;
   onClose: () => void;
-  executeAction: (title: string) => void;
+  onUpdate: (title: string) => void;
 }) {
   const { control, getValues, handleSubmit } = useForm<FormType>({
     defaultValues: {
@@ -27,7 +27,7 @@ export default function TitleActionForm({
 
   const onSubmit = () => {
     const title = getValues("title");
-    executeAction(title);
+    onUpdate(title);
     onClose();
   };
 

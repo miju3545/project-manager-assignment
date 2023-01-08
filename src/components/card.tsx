@@ -1,8 +1,8 @@
 import React from "react";
-import { CardType } from "../redux/lists";
+import { CardType, deleteCard } from "../redux/actions";
 import { Draggable } from "react-beautiful-dnd";
 import TitleActionButton from "./title-action-button";
-import { updateCardTitle } from "../redux/lists";
+import { updateCardTitle } from "../redux/actions";
 import { useDispatch } from "react-redux";
 
 export default function EachCard({
@@ -17,8 +17,12 @@ export default function EachCard({
   const { id, title } = card;
   const dispatch = useDispatch();
 
-  const executeAction = (listId: string) => (title: string) => {
+  const onUpdate = (listId: string) => (title: string) => {
     dispatch(updateCardTitle(listId, id, title));
+  };
+
+  const onDelete = () => {
+    dispatch(deleteCard(listId, id));
   };
 
   return (
@@ -32,7 +36,8 @@ export default function EachCard({
           <TitleActionButton
             title={title}
             type={"card"}
-            executeAction={executeAction(listId)}
+            onUpdate={onUpdate(listId)}
+            onDelete={onDelete}
           />
         </div>
       )}

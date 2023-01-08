@@ -2,25 +2,24 @@ import React from "react";
 import actionButtonData from "../data/actionButtonData";
 import { ActionButtonType } from "./add-action-button";
 import { Card } from "@mui/material";
-import Button from "@mui/material/Button";
+import MuiButton from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
+import styled from "@emotion/styled";
 
 type FormType = {
   title: string;
 };
 
-export default function ActionForm({
-  type,
-  onClose,
-  listId,
-}: {
+type ActionFormProps = {
   type: ActionButtonType;
   onClose: () => void;
   listId?: string;
-}) {
+};
+
+export default function ActionForm({ type, onClose, listId }: ActionFormProps) {
   const { control, handleSubmit, getValues } = useForm<FormType>({
     defaultValues: {
       title: "",
@@ -41,7 +40,7 @@ export default function ActionForm({
   const FormElement = actionButtonData[type].FormElement;
 
   return (
-    <div style={{ ...styles.container, ...actionButtonData[type].formStyle }}>
+    <Container style={actionButtonData[type].formStyle}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Card style={{ ...actionButtonData[type].formCardStyle }}>
           {
@@ -54,31 +53,32 @@ export default function ActionForm({
             />
           }
         </Card>
-        <div style={styles.button}>
-          <Button
-            type="submit"
-            variant="contained"
-            style={{
-              color: "#FFF",
-              backgroundColor: "#0279c0",
-              fontSize: 12,
-            }}
-          >
+        <ButtonWrapper>
+          <SubmitButton type="submit" variant="contained">
             {actionButtonData[type].buttonText}
-          </Button>
-          <IconButton aria-label="add">
+          </SubmitButton>
+          <IconButton aria-label="add" onClick={() => onClose()}>
             <CloseIcon />
           </IconButton>
-        </div>
+        </ButtonWrapper>
       </form>
-    </div>
+    </Container>
   );
 }
 
-const styles = {
-  container: {
-    backgroundColor: "#eaecf0",
-    borderRadius: 3,
-  },
-  button: { marginTop: 8, display: "flex", allignItems: "center" },
-};
+const Container = styled.div`
+  background-color: #eaecf0;
+  border-radius: 3;
+`;
+
+const ButtonWrapper = styled.div`
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+`;
+
+const SubmitButton = styled(MuiButton)`
+  color: #fff;
+  background-color: #0279c0;
+  font-size: 12;
+`;
