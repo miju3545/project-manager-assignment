@@ -42,13 +42,7 @@ export default function List({
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    justifyContent: "space-between",
-                  }}
-                >
+                <div className="inner">
                   <TitleActionButton
                     type="list"
                     title={title}
@@ -64,12 +58,12 @@ export default function List({
                   </IconButton>
                   <Modal show={showModal} onClose={onCloseModal}>
                     <Message
-                      message="Continue to delete this list?"
+                      message="해당 리스트를 삭제할까요?"
                       accept={{
-                        text: "continue",
+                        text: "네",
                         action: () => dispatch(deleteList(id)),
                       }}
-                      refuse={{ text: "back", action: onCloseModal }}
+                      refuse={{ text: "아니요", action: onCloseModal }}
                     />
                   </Modal>
                 </div>
@@ -91,8 +85,14 @@ export default function List({
 
 const ListContainer = styled.div`
   background-color: #eaecf0;
-  border-radius: 3px;
+  border-radius: 6px;
   min-width: 272px;
   padding: 6px;
   margin-right: 8px;
+
+  .inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
 `;

@@ -1,7 +1,7 @@
 import React from "react";
 import actionButtonData from "../data/actionButtonData";
 import { ActionButtonType } from "./add-action-button";
-import { Card } from "@mui/material";
+import Card from "@mui/material/Card";
 import MuiButton from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
@@ -31,7 +31,9 @@ export default function ActionForm({ type, onClose, listId }: ActionFormProps) {
   const onSubmit = () => {
     const title = getValues("title");
 
-    if (!title) return;
+    if (!title) {
+      return;
+    }
 
     dispatch(actionButtonData[type].dispatchAction(title, listId));
     onClose();
@@ -42,25 +44,27 @@ export default function ActionForm({ type, onClose, listId }: ActionFormProps) {
   return (
     <Container style={actionButtonData[type].formStyle}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Card style={{ ...actionButtonData[type].formCardStyle }}>
-          {
-            <FormElement
-              name={"title"}
-              control={control}
-              placeholder={actionButtonData[type].placeholder}
-              onSubmit={onSubmit}
-              onClose={onClose}
-            />
-          }
-        </Card>
-        <ButtonWrapper>
-          <SubmitButton type="submit" variant="contained">
-            {actionButtonData[type].buttonText}
-          </SubmitButton>
-          <IconButton aria-label="add" onClick={() => onClose()}>
-            <CloseIcon />
-          </IconButton>
-        </ButtonWrapper>
+        <label>
+          <Card style={{ ...actionButtonData[type].formCardStyle }}>
+            {
+              <FormElement
+                name={"title"}
+                control={control}
+                placeholder={actionButtonData[type].placeholder}
+                onSubmit={onSubmit}
+                onClose={onClose}
+              />
+            }
+          </Card>
+          <ButtonWrapper>
+            <SubmitButton type="submit" variant="contained">
+              {actionButtonData[type].buttonText}
+            </SubmitButton>
+            <IconButton aria-label="add" onClick={() => onClose()}>
+              <CloseIcon />
+            </IconButton>
+          </ButtonWrapper>
+        </label>
       </form>
     </Container>
   );
@@ -68,7 +72,7 @@ export default function ActionForm({ type, onClose, listId }: ActionFormProps) {
 
 const Container = styled.div`
   background-color: #eaecf0;
-  border-radius: 3;
+  border-radius: 6px;
 `;
 
 const ButtonWrapper = styled.div`
@@ -80,5 +84,10 @@ const ButtonWrapper = styled.div`
 const SubmitButton = styled(MuiButton)`
   color: #fff;
   background-color: #0279c0;
+
   font-size: 12;
+
+  &:hover {
+    backgroundcolor: #5ba4ce;
+  }
 `;

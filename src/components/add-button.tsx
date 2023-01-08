@@ -32,6 +32,5 @@ const ButtonContainer = styled.div`
   cursor: pointer;
   border-radius: 3px;
   height: 36px;
-  /* min-width: 272px; */
   font-size: 15px;
 `;

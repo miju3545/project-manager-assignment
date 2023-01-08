@@ -35,12 +35,14 @@ export default function TitleActionForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormElement
-        name={"title"}
-        control={control}
-        onSubmit={onSubmit}
-        onClose={onClose}
-      />
+      <label>
+        <FormElement
+          name={"title"}
+          control={control}
+          onSubmit={onSubmit}
+          onClose={onClose}
+        />
+      </label>
     </form>
   );
 }

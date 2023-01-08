@@ -1,6 +1,8 @@
 import React, { KeyboardEvent } from "react";
-import { InputBase } from "@mui/material";
+import { InputBase as MuiInput } from "@mui/material";
+
 import { Control, Controller } from "react-hook-form";
+import styled from "@emotion/styled";
 
 type InputProps = {
   name: string;
@@ -30,23 +32,26 @@ export default function Input({
       name={name}
       control={control}
       render={({ field: { onChange, value } }) => (
-        <InputBase
+        <CustomInput
           placeholder={placeholder}
           onKeyPress={onKeyPress}
           onBlur={onClose}
           value={value}
           onChange={onChange}
-          style={{
-            overflow: "hidden",
-            width: "100%",
-            outline: "none",
-            border: "none",
-            fontSize: 15,
-            backgroundColor: "#Ffff",
-          }}
           autoFocus
         />
       )}
     />
   );
 }
+
+const CustomInput = styled(MuiInput)`
+  overflow: hidden;
+  width: 100%;
+  font-size: 15px;
+  background-color: #fff;
+  font-weight: 500;
+  &:focus {
+    outline-color: blue;
+  }
+`;

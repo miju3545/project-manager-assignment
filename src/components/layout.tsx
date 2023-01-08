@@ -5,7 +5,7 @@ import GNB from "./gnb";
 const LayoutContainer = styled.div`
   width: 100%;
   height: 100vh;
-  background-color: rgb(220, 141, 179);
+  background-color: gray;
   overflow: scroll;
 `;
 

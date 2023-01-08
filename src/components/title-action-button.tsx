@@ -33,7 +33,13 @@ export default function TitleActionButton({
 
   return (
     <Container onClick={() => setShowForm((prev) => !prev)}>
-      <Card style={{ ...actionButtonData[type].formCardStyle }}>
+      <Card
+        style={
+          showForm
+            ? actionButtonData[type].formCardStyle
+            : actionButtonData[type].textCardStyle
+        }
+      >
         {showForm ? (
           <TitleActionForm
             type={type}
@@ -42,7 +48,14 @@ export default function TitleActionButton({
             onUpdate={onUpdate}
           />
         ) : (
-          <Typography sx={{ fontSize: 15 }} color="text.secondary" gutterBottom>
+          <Typography
+            style={{
+              fontSize: 15,
+              color: "#182b4e",
+            }}
+            color="text.primary"
+            gutterBottom
+          >
             {regexifyContent(title)}
           </Typography>
         )}
@@ -59,9 +72,9 @@ export default function TitleActionButton({
             </IconButton>
             <Modal show={showModal} onClose={onCloseModal}>
               <Message
-                message="Continue to delete this list?"
-                accept={{ text: "continue", action: onDelete }}
-                refuse={{ text: "back", action: onCloseModal }}
+                message="해당 카드를 삭제할까요?"
+                accept={{ text: "네", action: onDelete }}
+                refuse={{ text: "아니요", action: onCloseModal }}
               />
             </Modal>
           </>

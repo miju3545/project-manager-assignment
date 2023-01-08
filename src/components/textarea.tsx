@@ -37,11 +37,11 @@ export default function Textarea({
           onChange={onChange}
           style={{
             resize: "none",
-            overflow: "hidden",
             width: "100%",
             outline: "none",
             border: "none",
-            fontSize: 15,
+            fontSize: 16,
+            fontWeight: 500,
           }}
           autoFocus
         />
@@ -49,17 +49,3 @@ export default function Textarea({
     />
   );
 }
-
-// export default forwardRef<HTMLInputElement, TextareaProps>(Textarea);
-
-// const Textarea: ForwardRefRenderFunction<HTMLTextAreaElement, TextareaProps> = ({ onKeyPress, ...rest }, ref) => {
-//   return (
-//     <TextareaAutosize
-//       {...rest}
-//       style={{ resize: 'none', overflow: 'hidden', width: '100%', outline: 'none', border: 'none', fontSize: 15 }}
-//       onKeyPress={onKeyPress}
-//     />
-//   );
-// };
-
-// export default forwardRef(Textarea);
