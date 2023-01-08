@@ -1,122 +1,24 @@
-const TYPES = {
-  SYNC_LIST: "list/SYNC_LIST" as const,
-  ADD_LIST: "list/ADD_LIST" as const,
-  DELETE_LIST: "list/DELETE_LIST" as const,
-  UPDATE_LIST_TITLE: "list/UPDATE_LIST_TITLE" as const,
-  ADD_CARD: "card/ADD_CARD" as const,
-  UPDATE_CARD_TITLE: "card/UPDATE_CARD_TITLE" as const,
-  DELETE_CARD: "list/DELETE_CARD" as const,
-  EXECUTE_DRAGD_AND_ROP: "drag/EXECUTE_DRAGD_AND_ROP" as const,
-};
+import { v4 as uuid } from "uuid";
+import { updateLists, getLists } from "../../utils/localStorage";
+import TYPES from "../types";
+import { StateType, ActionType } from "../actions";
 
-export const syncList = (lists: ListType[]) => ({
-  type: TYPES.SYNC_LIST,
-  payload: lists,
-});
-
-export const addList = (title: string) => ({
-  type: TYPES.ADD_LIST,
-  payload: title,
-});
-
-export const deleteList = (listId: string) => ({
-  type: TYPES.DELETE_LIST,
-  payload: listId,
-});
-
-export const updateListTitle = (listId: string, title: string) => ({
-  type: TYPES.UPDATE_LIST_TITLE,
-  payload: { listId, title },
-});
-
-export const addCard = (title: string, listId?: string) => ({
-  type: TYPES.ADD_CARD,
-  payload: { listId, title },
-});
-
-export const updateCardTitle = (
-  listId: string,
-  cardId: string,
-  title: string
-) => ({
-  type: TYPES.UPDATE_CARD_TITLE,
-  payload: { listId, cardId, title },
-});
-
-export const deleteCard = (listId: string, cardId: string) => ({
-  type: TYPES.DELETE_CARD,
-  payload: { listId, cardId },
-});
-
-export const rearrange = (
-  draggableId: string,
-  droppableStartId: string,
-  droppableEndId: string,
-  droppableStartIndex: number,
-  droppableEndIndex: number,
-  type: string
-) => {
-  return {
-    type: TYPES.EXECUTE_DRAGD_AND_ROP,
-    payload: {
-      draggableId,
-      droppableStartId,
-      droppableEndId,
-      droppableStartIndex,
-      droppableEndIndex,
-      type,
-    },
-  };
-};
-
-export type CardType = {
-  id: string;
-  title: string;
-};
-
-export type ListType = {
-  id: string;
-  title: string;
-  cards: CardType[];
-};
-
-type StateType = ListType[];
-type ActionType =
-  | ReturnType<typeof syncList>
-  | ReturnType<typeof addList>
-  | ReturnType<typeof deleteList>
-  | ReturnType<typeof updateListTitle>
-  | ReturnType<typeof addCard>
-  | ReturnType<typeof updateCardTitle>
-  | ReturnType<typeof deleteCard>
-  | ReturnType<typeof rearrange>;
-
-const setList = (lists: ListType[]) =>
-  localStorage.setItem("lists", JSON.stringify(lists));
-
-const initialState: StateType =
-  JSON.parse(localStorage.getItem("lists") || "") || [];
-
-let nextId = 1;
+const initialState: StateType = getLists();
 
 export default function listsReducer(
   state: StateType = initialState,
   action: ActionType
 ): StateType {
   switch (action.type) {
-    case TYPES.SYNC_LIST: {
-      return action.payload;
-    }
-
     case TYPES.ADD_LIST: {
       const copied = [...state];
       const newList = copied.concat({
-        id: nextId++ + "",
+        id: uuid() + "",
         title: action.payload,
         cards: [],
       });
 
-      setList(newList);
+      updateLists(newList);
 
       return newList;
     }
@@ -124,7 +26,7 @@ export default function listsReducer(
     case TYPES.DELETE_LIST: {
       const newList = state.filter((list) => list.id !== action.payload);
 
-      setList(newList);
+      updateLists(newList);
 
       return newList;
     }
@@ -139,7 +41,7 @@ export default function listsReducer(
         return list;
       });
 
-      setList(newList);
+      updateLists(newList);
 
       return newList;
     }
@@ -150,7 +52,7 @@ export default function listsReducer(
 
         if (targetList) {
           const newCard = {
-            id: nextId++ + "",
+            id: uuid() + "",
             title: action.payload.title,
           };
           list.cards.push(newCard);
@@ -159,7 +61,7 @@ export default function listsReducer(
         return list;
       });
 
-      setList(newList);
+      updateLists(newList);
 
       return newList;
     }
@@ -181,7 +83,7 @@ export default function listsReducer(
         return list;
       });
 
-      setList(newList);
+      updateLists(newList);
 
       return newList;
     }
@@ -198,12 +100,12 @@ export default function listsReducer(
         return list;
       });
 
-      setList(newList);
+      updateLists(newList);
 
       return newList;
     }
 
-    case TYPES.EXECUTE_DRAGD_AND_ROP: {
+    case TYPES.REARRANGE: {
       const {
         droppableStartId,
         droppableEndId,
@@ -236,7 +138,7 @@ export default function listsReducer(
         endList.cards.splice(droppableEndIndex, 0, card);
       }
 
-      setList(copied);
+      updateLists(copied);
 
       return copied;
     }
