@@ -142,6 +142,10 @@ export default function listsReducer(
 
       return copied;
     }
+    case TYPES.DELETE_ALL_LIST: {
+      updateLists([]);
+      return [];
+    }
     default:
       return state;
   }

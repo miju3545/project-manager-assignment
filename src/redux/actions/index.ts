@@ -10,6 +10,7 @@ export const deleteList = (listId: string) => ({
   payload: listId,
 });
 
+export const DeleteAllLists = () => ({ type: TYPES.DELETE_ALL_LIST });
 export const updateListTitle = (listId: string, title: string) => ({
   type: TYPES.UPDATE_LIST_TITLE,
   payload: { listId, title },
@@ -74,4 +75,5 @@ export type ActionType =
   | ReturnType<typeof addCard>
   | ReturnType<typeof updateCardTitle>
   | ReturnType<typeof deleteCard>
-  | ReturnType<typeof rearrange>;
+  | ReturnType<typeof rearrange>
+  | ReturnType<typeof DeleteAllLists>;
