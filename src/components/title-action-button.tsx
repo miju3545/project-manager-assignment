@@ -9,6 +9,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Modal from "./modal";
 import Message from "./message";
 import Typography from "@mui/material/Typography";
+import regexifyContent from "../utils/regexifyContent";
 
 export default function TitleActionButton({
   type,
@@ -42,7 +43,7 @@ export default function TitleActionButton({
           />
         ) : (
           <Typography sx={{ fontSize: 15 }} color="text.secondary" gutterBottom>
-            {title}
+            {regexifyContent(title)}
           </Typography>
         )}
         {type === "card" && onDelete && (
