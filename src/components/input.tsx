@@ -35,7 +35,7 @@ export default function Input({
         <CustomInput
           placeholder={placeholder}
           onKeyPress={onKeyPress}
-          onBlur={onClose}
+          // onBlur={onClose}
           value={value}
           onChange={onChange}
           autoFocus

@@ -76,7 +76,7 @@ const Container = styled.div`
 `;
 
 const ButtonWrapper = styled.div`
-  margin-top: 8px;
+  margin-top: 10px;
   display: flex;
   align-items: center;
 `;
@@ -84,7 +84,6 @@ const ButtonWrapper = styled.div`
 const SubmitButton = styled(MuiButton)`
   color: #fff;
   background-color: #0279c0;
-
   font-size: 12;
 
   &:hover {
