@@ -4,28 +4,37 @@ import { addList, addCard, deleteCard } from "../redux/actions";
 
 const actionButtonData = {
   card: {
-    text: "Add another card",
-    placeholder: "Enter a title for this card...",
-    buttonText: "Add Card",
+    text: "카드 추가하기",
+    placeholder: "카드 제목을 입력하세요",
+    buttonText: "추가하기",
     buttonStyle: {
       textColor: "inherit",
       backgroundColor: "inherit",
     },
-    formStyle: {},
+    formStyle: {
+      // padding: 6,
+      minWidth: 272,
+      fontSize: 15,
+    },
     formCardStyle: {
       overflow: "visible",
       minHeight: 80,
       padding: "6px 8px 2px",
       fontSize: 15,
     },
+    textCardStyle: {
+      overflow: "visible",
+      minHeight: 30,
+      padding: "6px 8px 2px",
+    },
     FormElement: Textarea,
     dispatchAction: addCard,
     deleteAction: deleteCard,
   },
   list: {
-    text: "Add another list",
-    placeholder: "Enter list title...",
-    buttonText: "Add List",
+    text: "리스트 추가하기",
+    placeholder: "리스트 제목을 입력하세요",
+    buttonText: "추가하기",
     buttonStyle: {
       textColor: "#fff",
       backgroundColor: "rgba(0,0,0,0.2)",
@@ -39,7 +48,14 @@ const actionButtonData = {
     formCardStyle: {
       overflow: "visible",
       minHeight: 30,
-      // minWidth: 272,
+      padding: "6px 8px 2px",
+      width: "100%",
+    },
+
+    textCardStyle: {
+      overflow: "visible",
+      outline: "none",
+      minHeight: 30,
       padding: "6px 8px 2px",
     },
 
